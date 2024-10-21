@@ -34,8 +34,8 @@ Then, assuming `python3` and `pip3` are already installed,
 +
 [source, bash]
 ----
-python3 -m venv virtualenvs/neo-migration
-source virtualenvs/neo-migration/bin/activate
+python3 -m venv virtualenvs/neo4j-migration
+source virtualenvs/neo4j-migration/bin/activate
 pip3 install -r requirements.txt
 ----
 
