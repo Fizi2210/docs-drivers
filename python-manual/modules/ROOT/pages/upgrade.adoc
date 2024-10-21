@@ -57,7 +57,7 @@ You can add any spurious entry to the ignored list, so that the assistent won't 
 +
 [source, bash]
 ----
-pip3 install -U neo4j==5.25
+pip3 install -U neo4j==5.27
 ----
 
 
