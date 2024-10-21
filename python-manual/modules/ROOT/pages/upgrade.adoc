@@ -29,8 +29,8 @@ Then, assuming `python3` and `pip3` are already installed,
 +
 [source, bash]
 ----
-python3 -m venv virtualenvs/neo-migration
-source virtualenvs/neo-migration/bin/activate
+python3 -m venv virtualenvs/neo4j-migration
+source virtualenvs/neo4j-migration/bin/activate
 pip3 install -r requirements.txt
 ----
 
@@ -210,7 +210,7 @@ Deprecated features are likely to be removed in version 6.
 |{cross-mark}
 
 |5.0
-|Driver options `update_routing_table_timeout` and `session_connection_timeout` have been removed. Regular keep-alives are sufficient to avoid the driver getting stuck. Further liveness check config options are available but normally not needed (link:https://neo4j.com/docs/api/python-driver/current/api.html#keep-alive-ref[`keep_alive`], link:https://neo4j.com/docs/api/python-driver/current/api.html#liveness-check-timeout[`liveness_check_timeout`]).
+|link:https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Driver[`Driver`] -- The config options `update_routing_table_timeout` and `session_connection_timeout` have been removed. Regular keep-alives are sufficient to avoid the driver getting stuck. Further liveness check config options are available but normally not needed (link:https://neo4j.com/docs/api/python-driver/current/api.html#keep-alive-ref[`keep_alive`], link:https://neo4j.com/docs/api/python-driver/current/api.html#liveness-check-timeout[`liveness_check_timeout`]).
 |label:removed[]
 |{check-mark}
 
@@ -220,7 +220,7 @@ Deprecated features are likely to be removed in version 6.
 |{check-mark}
 
 |5.0
-|link:https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.ServerInfo[`neo4j.ServerInfo`] -- `ResultSummary.server.version_info` has been removed.
+|link:https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.ServerInfo[`ServerInfo`] -- `ResultSummary.server.version_info` has been removed.
 Use `ResultSummary.server.agent`, `ResultSummary.server.protocol_version`, or call the link:https://neo4j.com/docs/operations-manual/current/reference/procedures/#procedure_dbms_components[`dbms.components`] Cypher procedure instead.
 |label:removed[]
 |{check-mark}
@@ -284,8 +284,8 @@ Multiplication and division allow for floats but will always result in integer v
 |{check-mark}
 
 |5.0
-|Session methods `.read_transaction()` and `.write_transaction()` are deprecated in favor of link:https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session.execute_read[`.execute_read()`] and link:https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session.execute_write[`.execute_write()`].
-Through the new methods, the first argument of transaction functions is a `ManagedTransaction` object. It behaves exactly like a regular `Transaction` object, except it does not offer the `.commit()`, `.rollback()`, `.close()`, and `.closed()` methods.
+|link:https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session[`Session`] -- Methods `.read_transaction()` and `.write_transaction()` are deprecated in favor of link:https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session.execute_read[`.execute_read()`] and link:https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session.execute_write[`.execute_write()`].
+Through the new methods, the first argument of transaction functions is a `ManagedTransaction` object. It behaves like a regular `Transaction` object, except it does not offer the `.commit()`, `.rollback()`, `.close()`, and `.closed()` methods.
 |label:deprecated[]
 |{check-mark}
 
@@ -295,7 +295,7 @@ Through the new methods, the first argument of transaction functions is a `Manag
 |{cross-mark}
 
 |5.0
-|Property `id` (int) for link:https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.graph.Node[`Node`] and link:https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.graph.Relationship[`Relationship`] objects is deprecated in favor of `element_id` (str).
+|link:https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.graph.Node[`Node`], link:https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.graph.Relationship[`Relationship`] -- Property `id` (int) is deprecated in favor of `element_id` (str).
 This also affects link:https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.graph.Graph[`Graph`] objects, as indexing `graph.nodes[...]` and `graph.relationships[...]` with integers is deprecated in favor of indexing them with strings.
 |label:deprecated[]
 |{check-mark} property +
@@ -318,12 +318,12 @@ Call `driver.close()` explicitly or create the driver via a `with` statement.
 |{check-mark}
 
 |5.0
-|The `trust` driver option is deprecated. New options link:https://neo4j.com/docs/api/python-driver/current/api.html#trusted-certificates-ref[`trusted_certificates`] and link:https://neo4j.com/docs/api/python-driver/current/api.html#ssl-context-ref[`ssl_context`] are available.
+|link:https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Driver[`Driver`] -- The config option `trust` is deprecated. New options link:https://neo4j.com/docs/api/python-driver/current/api.html#trusted-certificates-ref[`trusted_certificates`] and link:https://neo4j.com/docs/api/python-driver/current/api.html#ssl-context-ref[`ssl_context`] are available.
 |label:deprecated[]
 |{check-mark}
 
 |5.0
-|`Session.last_bookmark()` is deprecated in favor of link:https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session.last_bookmarks[`Session.last_bookmarks()`]. The logic is similar, but the new method returns `neo4j.Bookmarks` instead of `str`.
+|link:https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session[`Session`] -- The method `.last_bookmark()` is deprecated in favor of link:https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Session.last_bookmarks[`.last_bookmarks()`]. The logic is similar, but the new method returns `neo4j.Bookmarks` instead of `str`.
 |label:deprecated[]
 |{check-mark}
 
