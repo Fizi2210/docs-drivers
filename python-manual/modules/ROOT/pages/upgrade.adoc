@@ -353,7 +353,7 @@ Call `driver.close()` explicitly or create the driver via a `with` statement.
 |{check-mark}
 
 |5.0
-|Undocumented helper methods `Neo4jError.is_fatal_during_discovery()` and `Neo4jError.invalidates_all_connections()` are deprecated without replacement.
+|Undocumented methods `Neo4jError.is_fatal_during_discovery()` and `Neo4jError.invalidates_all_connections()` are deprecated without replacement.
 |label:deprecated[]
 |{check-mark}
 
