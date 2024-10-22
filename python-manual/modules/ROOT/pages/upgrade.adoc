@@ -357,9 +357,9 @@ Call `driver.close()` explicitly or create the driver via a `with` statement.
 |label:deprecated[]
 |{check-mark}
 
-|5.27
+|5.26
 |Undocumented method `Neo4jError.hydrate()` is deprecated without replacement. +
-Altering the code or message of a `Neo4jError` is deprecated.
+Altering the attributes of a `Neo4jError` is deprecated.
 |label:deprecated[]
 |{check-mark}
 
