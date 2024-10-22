@@ -8,10 +8,10 @@ include::{common-partial}/upgrade.adoc[tag=intro]
 [[recommended-steps]]
 == Recommended steps
 
-Using the migration assistent, the recommended upgrade steps are:
+Using the migration assistant, the recommended upgrade steps are:
 
-1. Set up the environment for the assistent to work in.
-Download the link:https://github.com/neo4j/drivers-migration-assistent/archive/refs/heads/dev.zip[Drivers Migration Assistent zip], extract it, and locate yourself in its directory.
+1. Set up the environment for the assistant to work in.
+Download the link:https://github.com/neo4j/drivers-migration-assistant/archive/refs/heads/dev.zip[Drivers Migration Assistant zip], extract it, and locate yourself in its directory.
 Then, assuming `python3` and `pip3` are already installed,
 +
 [source, bash]
@@ -21,24 +21,24 @@ source virtualenvs/neo4j-migration/bin/activate
 pip3 install -r requirements.txt
 ----
 
-2. Run the migration assistent with its default configuration and address all the issues that it surfaces. The `path` argument supports link:https://www.man7.org/linux/man-pages/man7/glob.7.html[globbing], and can be repeated. +
+2. Run the migration assistant with its default configuration and address all the issues that it surfaces. The `path` argument supports link:https://www.man7.org/linux/man-pages/man7/glob.7.html[globbing], and can be repeated. +
 +
 [source, bash]
 ----
 python3 main.py -l javascript /path/*.js /path-recursive/**/*.js
 ----
 
-3. Re-run the assistent with the regex parser and check if any more legit issues are raised. +
+3. Re-run the assistant with the regex parser and check if any more legit issues are raised. +
 +
 [source, bash]
 ----
 python3 main.py -l javascript --regex-parser /path/*.js /path-recursive/**/*.js
 ----
 +
-The regex parser can detect implicit function calls and other hard-to-parse expressions, but is likely to surface more false positives (for more information, see link:https://github.com/neo4j/drivers-migration-assistent?tab=readme-ov-file#accuracy[Neo4j Drivers Migration Assistent -> Accuracy]).
-You can add any spurious entry to the ignored list, so that the assistent won't bring them up in future runs.
+The regex parser can detect implicit function calls and other hard-to-parse expressions, but is likely to surface more false positives (for more information, see link:https://github.com/neo4j/drivers-migration-assistant?tab=readme-ov-file#accuracy[Neo4j Drivers Migration Assistant -> Accuracy]).
+You can add any spurious entry to the ignored list, so that the assistant won't bring them up in future runs.
 
-4. Although the assistent can detect most of the locations where action is needed, a few changelog entries can't be surfaced in this form, so you should still revise the xref:breaking-changes[breaking changes] section and audit your codebase for the changes marked with {cross-mark} in the table.
+4. Although the assistant can detect most of the locations where action is needed, a few changelog entries can't be surfaced in this form, so you should still revise the xref:breaking-changes[breaking changes] section and audit your codebase for the changes marked with {cross-mark} in the table.
 
 5. You are ready to upgrade the driver package to the new version. For example, using `npm`: +
 +
@@ -139,14 +139,14 @@ See link:https://github.com/neo4j/neo4j-javascript-driver/pull/1142[Metrics/Tele
 [[breaking-changes]]
 == Breaking changes and deprecations
 
-The column `Assistent` denotes whether the Neo4j Drivers Migration Assistent can detect issues related to the given changelog entry.
+The column `Assistant` denotes whether the Neo4j Drivers Migration Assistant can detect issues related to the given changelog entry.
 Entries with a cross mark {cross-mark} require manual inspection.
 
 Deprecated features are likely to be removed in version 6.
 
 [cols="1,5a,1,1"]
 |===
-|Version |Message |Status |Assistent
+|Version |Message |Status |Assistant
 
 |5.0
 |link:https://neo4j.com/docs/api/javascript-driver/current/class/lib6/result-summary.js~ServerInfo.html[`ResultSummary.ServerInfo`] -- `ResultSummary.server.version` has been removed.
