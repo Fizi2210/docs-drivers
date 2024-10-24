@@ -1,6 +1,6 @@
 = Upgrade from older versions
 
-This page contains the list of new features and breaking changes that happened in the driver from version 4.4 to 5.x.
+This page contains the list of new features and breaking changes that happened in the driver from version 4.4 to 5.x. +
 For a full list of changes, see the link:https://github.com/neo4j/neo4j-python-driver/wiki/5.x-changelog[Driver -> Changelog].
 
 [NOTE]
