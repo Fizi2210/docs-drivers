@@ -2,7 +2,7 @@
 
 = Upgrade from older versions
 
-This page contains the list of new features and breaking changes of the driver from version 4.4 to 5.x.
+This page contains the list of new features and breaking changes of the driver from version 4.4 to 5.x. +
 For a full list of changes, see the link:{driver-changelog-url}[Driver -> Changelog].
 
 [NOTE]
