@@ -228,7 +228,7 @@ Session authentication requires a server version >= 5.8.
 ----
 driver.execute_query(
     "MATCH (p:Person) RETURN p.name",
-    auth_=("somebody_else", "their_password")
+    auth_=("somebody_else", "their_password"),
     database_="neo4j",
 )
 ----

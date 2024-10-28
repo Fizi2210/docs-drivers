@@ -458,6 +458,7 @@ Session authentication requires a server version >= 5.8.
 [source, java]
 ----
 // import org.neo4j.driver.AuthTokens;
+// import org.neo4j.driver.Session;
 // import org.neo4j.driver.SessionConfig;
 
 var authToken = AuthTokens.basic("somebodyElse", "theirPassword");
