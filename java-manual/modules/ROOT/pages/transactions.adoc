@@ -484,18 +484,6 @@ var session = driver.session(SessionConfig.builder()
 ----
 
 
-[#impersonation]
-=== Run queries as a different user (impersonation)
-
-You can execute a query under the security context of a different user with the method `.withImpersonatedUser("<username>")`, specifying the name of the user to impersonate.
-For this to work, the user under which the `Driver` was created needs to have the link:{neo4j-docs-base-uri}/operations-manual/current/authentication-authorization/dbms-administration/#access-control-dbms-administration-impersonation[appropriate permissions].
-Impersonating a user is cheaper than creating a new `Driver` object.
-
-
-
-When impersonating a user, the query is run within the complete security context of the impersonated user and not the authenticated user (i.e. home database, permissions, etc.).
-
-
 == Transaction configuration
 
 You can exert further control on transactions by providing a  link:https://neo4j.com/docs/api/java-driver/current/org.neo4j.driver/org/neo4j/driver/TransactionConfig.html[`TransactionConfig`] object as (optional) second parameter to `.executeRead()`, `.executeWrite()`, and `.beginTransaction()`.
