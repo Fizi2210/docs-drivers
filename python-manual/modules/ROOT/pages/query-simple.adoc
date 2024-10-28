@@ -224,7 +224,7 @@ Switching user at the query level is cheaper than creating a new `Driver` object
 Queries are then run within the security context of the given user, and not the one under which the `Driver` was instantiated with (i.e., home database, permissions, etc.). +
 Session authentication requires a server version >= 5.8.
 
-[source, python]
+[source, python, test-skip]
 ----
 driver.execute_query(
     "MATCH (p:Person) RETURN p.name",
