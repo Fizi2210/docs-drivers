@@ -227,12 +227,27 @@ In other words, there is no guarantee that a write query submitted in read mode 
 
 
 [#impersonation]
+[role=label--new-5.14]
 === Run queries as a different user
 
-You can execute a query under the security context of a different user with the callback `neo4j.ExecuteQueryWithImpersonatedUser("<somebodyElse>")`, specifying the name of the user to impersonate.
-For this to work, the user under which the `DriverWithContext` object
-was created needs to have the link:{neo4j-docs-base-uri}/cypher-manual/current/administration/access-control/dbms-administration#access-control-dbms-administration-impersonation[appropriate permissions].
-Impersonating a user is cheaper than creating a new `DriverWithContext` object.
+You can execute a query through a different user with the configuration callback `neo4j.ExecuteQueryWithAuthToken()`.
+Switching user at the query level is cheaper than creating a new `DriverWithContext` object.
+The query is then run within the security context of the given user, and not the one under which the driver was instantiated with (i.e., home database, permissions, etc.). +
+Session authentication requires a server version >= 5.8.
+
+[source, go]
+----
+queryAuth := neo4j.BasicAuth("somebodyElse", "theirPassword", "")
+neo4j.ExecuteQuery(ctx, driver,
+    "MATCH (p:Person) RETURN p.name",
+    nil,
+    neo4j.EagerResultTransformer,
+    neo4j.ExecuteQueryWithDatabase("neo4j"),
+    neo4j.ExecuteQueryWithAuthToken(queryAuth))
+----
+
+The callback `neo4j.ExecuteQueryWithImpersonatedUser()` provides a similar functionality, is available earlier than version 5.14, and works on all server versions.
+However, impersonation requires the user under which the driver was created to have the link:{neo4j-docs-base-uri}/operations-manual/current/authentication-authorization/dbms-administration/#access-control-dbms-administration-impersonation[appropriate permissions].
 
 [source, go]
 ----
@@ -243,8 +258,6 @@ neo4j.ExecuteQuery(ctx, driver,
     neo4j.ExecuteQueryWithDatabase("neo4j"),
     neo4j.ExecuteQueryWithImpersonatedUser("<somebodyElse>"))
 ----
-
-When impersonating a user, the query is run within the complete security context of the impersonated user and not the authenticated user (i.e. home database, permissions, etc.).
 
 
 == A full example
