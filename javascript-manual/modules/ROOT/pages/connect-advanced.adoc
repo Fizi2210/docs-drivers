@@ -88,7 +88,7 @@ import neo4j, { AuthToken } from 'neo4j-driver'
  * this function resolves the new auth token.
  */
 async function generateAuthToken () {
-   const bearer = await getSSOToken()
+   const bearer = await getSSOToken()  // some way to get a token
    const token = neo4j.auth.bearer(bearer)
 
    // assume we know tokens expire every 60 seconds
@@ -106,7 +106,7 @@ async function generateAuthToken () {
 
 const driver = neo4j.driver(
     URI,
-    neo4j.expirationBasedAuthTokenManager({
+    neo4j.authTokenManagers.bearer({
         tokenProvider: generateAuthToken
     })
 )
