@@ -63,17 +63,25 @@ Use the function link:{neo4j-docs-base-uri}/api/python-driver/current/api.html#n
 If authentication is disabled on the server, the authentication parameter can be omitted entirely.
 
 
+[role=label--new-5.27]
 == Mutual TLS (client-side certificates as 2FA)
 
 Mutual TLS (mTLS) allows you to use a client certificate as second factor for authenticating with the server.
 The certificate can only be used together with an authentication token and is not a replacement of regular authentication, unless authentication is disabled on the server.
 
+[.tabbed-example]
+=====
+[.include-with-static-certificate]
+======
+Use link:https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.auth_management.ClientCertificateProviders.static[`ClientCertificateProviders.static()`] for static certificates. +
+The method takes a link:https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.auth_management.ClientCertificate[`ClientCertificate`] instance.
+
 [source, python, test-skip]
 ----
 import neo4j
 from neo4j.auth_management import (
-    ClientCertificateProviders,
     ClientCertificate,
+    ClientCertificateProviders,
 )
 
 
@@ -98,11 +106,67 @@ with neo4j.GraphDatabase.driver(
     auth=AUTH,
     client_certificate=cert_provider,
 ) as driver:
-    with driver.session() as session:
-        result = session.run("RETURN 'now with mTLS 🔒'")
-        for record in result:
-            print(record)
+    ...
 ----
+
+======
+[.include-with-rotating-certificate]
+======
+
+Use link:https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.auth_management.ClientCertificateProviders.rotating[`ClientCertificateProviders.rotating()`] for rotating certificates. +
+The method takes a link:https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.auth_management.ClientCertificate[`ClientCertificate`] instance.
+
+[source, python, test-skip]
+----
+import neo4j
+from neo4j.auth_management import (
+    ClientCertificate,
+    ClientCertificateProviders,
+)
+
+# must use a secure driver with client certificates (...+s[sc] scheme or encrypted=True)
+# ex. "neo4j+s://example.com:7687"
+URI = "<URI for Neo4j database>"
+# auth still required, unless server has authentication disabled
+AUTH = ("<Username>", "<Password>")
+
+
+cert_provider = ClientCertificateProviders.rotating(
+    ClientCertificate(
+        # path to public certificate to load
+        "path/to/cert.pem",
+        # path to private key to load
+        "path/to/key.pem",
+        # password to decrypt private key (can be a function or string)
+        # see also Python's ssl.SSLContext.load_cert_chain()
+        lambda: "password",
+    )
+)
+driver = neo4j.GraphDatabase.driver(
+   URI
+   auth=(USERNAME, PASSWORD),
+   client_certificate=cert_provider
+)
+
+# do work with the driver, until the certificate needs to be rotated
+# ...
+
+cert_provider.update_certificate(
+    ClientCertificate(
+        certfile="path/to/new/certfile.pem",
+        keyfile="path/to/new/keyfile.pem",
+        password=lambda: "new_super_secret_password"
+    )
+)
+
+# do more work with the driver, until the certificate needs to be
+# rotated again
+# ...
+----
+
+======
+=====
+
 
 For more information, see link:https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.auth_management.ClientCertificateProvider[API docs -> `ClientCertificateProvider`].
 
