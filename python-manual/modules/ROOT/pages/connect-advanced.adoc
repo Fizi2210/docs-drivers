@@ -71,8 +71,7 @@ Mutual TLS (mTLS) allows you to use a client certificate as second factor for au
 The certificate can only be used together with an authentication token and is not a replacement of regular authentication, unless authentication is disabled on the server.
 
 [NOTE]
-must use a secure driver with client certificates (...+s[sc] scheme or encrypted=True)
-# ex. "neo4j+s://example.com:7687"
+For mTLS to work, the driver's connection with the server must be encrypted, i.e. the xref:_connection_protocols_and_security[connection URI scheme] must be either `+s` or `+ssc` (ex. `neo4j+s://example.com:7687`).
 
 [.tabbed-example]
 =====
