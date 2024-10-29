@@ -83,41 +83,26 @@ The easiest way to get started is to use link:https://neo4j.com/docs/api/java-dr
 .Rotating a bearer token expiring every 60 seconds
 [source, javascript, test-skip]
 ----
-/**
- * Method called whenever the driver needs to refresh the token.
- *
- * The refresh will happen if the driver is notified by the server
- * of token expiration, or if `Date.now() > tokenData.expiry`.
- *
- * The driver will block creation of all connections until
- * this function resolves the new auth token.
- */
-async function generateAuthToken () {
-   const bearer = await getSSOToken()  // some way to get a token
-   const token = neo4j.auth.bearer(bearer)
+// import java.time.Clock;
+// import java.util.concurrent.TimeUnit;
+// import org.neo4j.driver.AuthTokenManagers;
+// import org.neo4j.driver.GraphDatabase;
 
-   // assume we know tokens expire every 60 seconds
-   const expiresIn = 60
-   // Include a little buffer so that new token is fetched before the old one expires
-   const expiration = expiresIn - 10
+var tokenManager = AuthTokenManagers.bearer(() -> {
+    var token = getToken(); // some way to get a token
 
-   return {
-      token,
-      // if expiration is not provided,
-      // the driver will only fetch a new token when an auth failure happens
-      expiration
-   }
-}
+    // assume we know tokens expire every 60 seconds
+    var expiresIn = TimeUnit.SECONDS.toMillis(60);
+    // Include a little buffer so that new token is fetched before the old one expires
+    var expiration = Clock.systemUTC().millis() + (expiresIn - TimeUnit.SECONDS.toMillis(10));
 
-const driver = neo4j.driver(
-    URI,
-    neo4j.expirationBasedAuthTokenManager({
-        tokenProvider: generateAuthToken
-    })
-)
+    return token.expiringAt(expiration);
+});
+
+var driver = GraphDatabase.driver(dbUri, tokenManager);
 ----
 
-[WARNING]
+[NOTE]
 This API should not be used for switching users. Auth managers should always return tokens for the same identity.
 You can switch users at both xref:query-simple.adoc#impersonation[query level] and xref:transactions.adoc#impersonation[session level].
 

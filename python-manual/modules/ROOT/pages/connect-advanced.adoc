@@ -100,7 +100,7 @@ with neo4j.GraphDatabase.driver(
     ...
 ----
 
-[WARNING]
+[NOTE]
 This API should not be used for switching users. Auth managers should always return tokens for the same identity.
 You can switch users at both xref:query-simple.adoc#impersonation[query level] and xref:transactions.adoc#impersonation[session level].
 
