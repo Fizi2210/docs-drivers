@@ -65,6 +65,79 @@ const driver = neo4j.driver(
 If authentication is disabled on the server, the authentication parameter can be omitted entirely.
 
 
+[#mtls]
+[role=label--new-5.27]
+== Mutual TLS (client-side certificates as 2FA)
+
+Mutual TLS (mTLS) allows you to use a client certificate as second factor for authenticating with the server.
+The certificate can only be used together with an authentication token and is not a replacement of regular authentication, unless authentication is disabled on the server.
+
+[.tabbed-example]
+=====
+[.include-with-static-certificate]
+======
+Use link:https://pkg.go.dev/github.com/neo4j/neo4j-go-driver/v5/neo4j/auth#NewStaticClientCertificateProvider[`auth.NewStaticClientCertificateProvider()`] for static certificates. +
+The method takes a link:https://pkg.go.dev/github.com/neo4j/neo4j-go-driver/v5/neo4j/auth#ClientCertificate[`ClientCertificate`] instance.
+
+[source, go, test-skip]
+----
+const driver = neo4j.driver('neo4j+s://myhost:7687', MY_CREDENTIALS, {
+   clientCertificate: {
+      certfile: '/path/to/cert/file.cert',
+      keyfile: '/path/to/cert/file.pem',
+      password: 'the_key_password' // optional
+   }
+})
+
+// then use your driver as usual.
+----
+
+======
+[.include-with-rotating-certificate]
+======
+
+Use link:https://pkg.go.dev/github.com/neo4j/neo4j-go-driver/v5/neo4j/auth#NewRotatingClientCertificateProvider[`auth.NewRotatingClientCertificateProvider()`] for rotating certificates. +
+The method takes a link:https://pkg.go.dev/github.com/neo4j/neo4j-go-driver/v5/neo4j/auth#ClientCertificate[`ClientCertificate`] instance.
+
+[source, go, test-skip]
+----
+import neo4j from 'neo4j-driver'
+
+const initialClientCertificate: {
+  certfile: '/path/to/cert/file.cert',
+  keyfile: '/path/to/cert/file.pem',
+  password: 'the_key_password' // optional
+}
+
+const clientCertificateProvider = neo4j.clientCertificateProviders.rotating({
+    initialCertificate: initialClientCertificate
+})
+
+const driver = neo4j.driver('neo4j+s://myhost:7687', MY_CREDENTIALS, {
+   clientCertificate: clientCertificateProvider
+})
+
+
+// use the driver as usual
+
+// then you have new certificate which will replace the old one
+clientCertificateProvider.updateCertificate({
+  certfile: '/path/to/cert/new_file.cert',
+  keyfile: '/path/to/cert/new_file.pem',
+  password: 'the_new_key_password' // optional
+})
+
+// New connections will be created using the new certificate.
+// however, older connections will not be closed if they still working.
+----
+
+======
+=====
+
+
+For more information, see link:https://pkg.go.dev/github.com/neo4j/neo4j-go-driver/v5/neo4j/auth#ClientCertificateProvider[API docs -> `ClientCertificateProvider`].
+
+
 == Custom address resolver
 
 When creating a `Driver` object, you can specify a _resolver_ function to resolve the connection address the driver is initialized with.

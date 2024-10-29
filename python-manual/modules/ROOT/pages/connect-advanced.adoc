@@ -63,11 +63,16 @@ Use the function link:{neo4j-docs-base-uri}/api/python-driver/current/api.html#n
 If authentication is disabled on the server, the authentication parameter can be omitted entirely.
 
 
+[#mtls]
 [role=label--new-5.27]
 == Mutual TLS (client-side certificates as 2FA)
 
 Mutual TLS (mTLS) allows you to use a client certificate as second factor for authenticating with the server.
 The certificate can only be used together with an authentication token and is not a replacement of regular authentication, unless authentication is disabled on the server.
+
+[NOTE]
+must use a secure driver with client certificates (...+s[sc] scheme or encrypted=True)
+# ex. "neo4j+s://example.com:7687"
 
 [.tabbed-example]
 =====
@@ -124,10 +129,7 @@ from neo4j.auth_management import (
     ClientCertificateProviders,
 )
 
-# must use a secure driver with client certificates (...+s[sc] scheme or encrypted=True)
-# ex. "neo4j+s://example.com:7687"
 URI = "<URI for Neo4j database>"
-# auth still required, unless server has authentication disabled
 AUTH = ("<Username>", "<Password>")
 
 
