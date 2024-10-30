@@ -79,6 +79,10 @@ If authentication is disabled on the server, the authentication parameter can be
 Mutual TLS (mTLS) allows you to use a client certificate as second factor for authenticating with the server.
 The certificate can only be used together with an authentication token and is not a replacement of regular authentication, unless authentication is disabled on the server.
 
+Use link:https://neo4j.com/docs/api/java-driver/current/org.neo4j.driver/org/neo4j/driver/ClientCertificateManagers.html[`ClientCertificateManagers.rotating()`] for both static and rotating certificates. +
+The method takes a link:https://neo4j.com/docs/api/java-driver/current/org.neo4j.driver/org/neo4j/driver/ClientCertificates.html[`ClientCertificate`] instance. +
+For rotating certificates, use the `.rotate()` method; static certificates don't need to be updated. +
+
 [NOTE]
 For mTLS to work, the driver's connection with the server must be encrypted, i.e. the xref:_connection_protocols_and_security[connection URI scheme] must be either `+s` or `+ssc` (ex. `neo4j+s://example.com:7687`).
 
@@ -86,8 +90,6 @@ For mTLS to work, the driver's connection with the server must be encrypted, i.e
 =====
 [.include-with-static-certificate]
 ======
-Use link:https://neo4j.com/docs/api/java-driver/current/org.neo4j.driver/org/neo4j/driver/ClientCertificateManagers.html[`ClientCertificateManagers.rotating()`] for static certificates. +
-The method takes a link:httpshttps://neo4j.com/docs/api/java-driver/current/org.neo4j.driver/org/neo4j/driver/ClientCertificates.html[`ClientCertificate`] instance.
 
 [source, java, test-skip]
 ----
@@ -106,9 +108,6 @@ try (var driver = GraphDatabase.driver(dbUri, AuthTokens.basic(dbUser, dbPasswor
 ======
 [.include-with-rotating-certificate]
 ======
-
-Use link:https://neo4j.com/docs/api/java-driver/current/org.neo4j.driver/org/neo4j/driver/ClientCertificateManagers.html[`ClientCertificateManagers.rotating()`] for rotating certificates. +
-The method takes a link:httpshttps://neo4j.com/docs/api/java-driver/current/org.neo4j.driver/org/neo4j/driver/ClientCertificates.html[`ClientCertificate`] instance.
 
 [source, java, test-skip]
 ----
