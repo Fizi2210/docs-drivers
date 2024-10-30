@@ -78,7 +78,7 @@ If authentication is disabled on the server, the authentication parameter can be
 It is possible to rotate authentication tokens that are expected to expire (e.g. SSO).
 You need to provide a link:https://neo4j.com/docs/api/java-driver/current/org.neo4j.driver/org/neo4j/driver/AuthTokenManager.html[`AuthTokenManager`] instance when instantiating the `Driver`, rather than a static authentication token.
 
-The easiest way to get started is to use link:https://neo4j.com/docs/api/java-driver/current/org.neo4j.driver/org/neo4j/driver/AuthTokenManagers.html[one of built-in `AuthTokenManager` implementations].
+The easiest way to get started is to use link:https://neo4j.com/docs/api/java-driver/current/org.neo4j.driver/org/neo4j/driver/AuthTokenManagers.html[one of built-in `AuthTokenManager` implementations]. AuthTokenManagers work with link:https://neo4j.com/docs/api/java-driver/5.26/org.neo4j.driver/org/neo4j/driver/AuthTokens.html[`AuthToken`] objects.
 
 .Rotating a bearer token expiring every 60 seconds
 [source, java, test-skip]
@@ -93,7 +93,7 @@ void rotatingBearerDriver() {
     var tokenManager = AuthTokenManagers.bearer(() -> {
         var token = AuthTokens.bearer(getToken());
 
-        // assume we know tokens expire every 60 seconds
+        // Assume we know tokens expire every 60 seconds
         var expiresIn = TimeUnit.SECONDS.toMillis(60);
         // Include a little buffer so that new token is fetched before the old one expires
         var expiration = Clock.systemUTC().millis() + (expiresIn - TimeUnit.SECONDS.toMillis(10));
@@ -104,7 +104,7 @@ void rotatingBearerDriver() {
     var driver = GraphDatabase.driver(dbUri, tokenManager);
 }
 
-// some way to get a token
+// Some way to get a token
 private String getToken() {
     return "token-string";
 }
@@ -115,7 +115,7 @@ This API should not be used for switching users. Auth managers should always ret
 You can switch users at both xref:query-simple.adoc#impersonation[query level] and xref:transactions.adoc#impersonation[session level].
 
 [WARNING]
-`AuthManagers` (including provider functions passed to `expirationBasedAuthTokenManager()`) must not interact with the driver in any way, as this can cause deadlocks and undefined behavior.
+`AuthTokenManager` objects must not interact with the driver in any way, as this can cause deadlocks and undefined behavior.
 
 
 == Logging
