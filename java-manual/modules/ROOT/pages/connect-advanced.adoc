@@ -81,25 +81,33 @@ You need to provide a link:https://neo4j.com/docs/api/java-driver/current/org.ne
 The easiest way to get started is to use link:https://neo4j.com/docs/api/java-driver/current/org.neo4j.driver/org/neo4j/driver/AuthTokenManagers.html[one of built-in `AuthTokenManager` implementations].
 
 .Rotating a bearer token expiring every 60 seconds
-[source, javascript, test-skip]
+[source, java, test-skip]
 ----
 // import java.time.Clock;
 // import java.util.concurrent.TimeUnit;
 // import org.neo4j.driver.AuthTokenManagers;
+// import org.neo4j.driver.AuthTokens;
 // import org.neo4j.driver.GraphDatabase;
 
-var tokenManager = AuthTokenManagers.bearer(() -> {
-    var token = getToken(); // some way to get a token
+void rotatingBearerDriver() {
+    var tokenManager = AuthTokenManagers.bearer(() -> {
+        var token = AuthTokens.bearer(getToken());
 
-    // assume we know tokens expire every 60 seconds
-    var expiresIn = TimeUnit.SECONDS.toMillis(60);
-    // Include a little buffer so that new token is fetched before the old one expires
-    var expiration = Clock.systemUTC().millis() + (expiresIn - TimeUnit.SECONDS.toMillis(10));
+        // assume we know tokens expire every 60 seconds
+        var expiresIn = TimeUnit.SECONDS.toMillis(60);
+        // Include a little buffer so that new token is fetched before the old one expires
+        var expiration = Clock.systemUTC().millis() + (expiresIn - TimeUnit.SECONDS.toMillis(10));
 
-    return token.expiringAt(expiration);
-});
+        return token.expiringAt(expiration);
+    });
 
-var driver = GraphDatabase.driver(dbUri, tokenManager);
+    var driver = GraphDatabase.driver(dbUri, tokenManager);
+}
+
+// some way to get a token
+private String getToken() {
+    return "token-string";
+}
 ----
 
 [NOTE]
