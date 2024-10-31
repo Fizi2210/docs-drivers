@@ -221,8 +221,8 @@ In other words, there is no guarantee that a write query submitted in read mode 
 
 You can execute a query through a different user with the parameter `auth_`.
 Switching user at the query level is cheaper than creating a new `Driver` object.
-Queries are then run within the security context of the given user, and not the one under which the `Driver` was instantiated with (i.e., home database, permissions, etc.). +
-Session authentication requires a server version >= 5.8.
+The query is then run within the security context of the given user (i.e., home database, permissions, etc.). +
+This feature requires a server version >= 5.8.
 
 [source, python, test-skip]
 ----
@@ -233,7 +233,7 @@ driver.execute_query(
 )
 ----
 
-The parameter `impersonated_user_` provides a similar functionality, and is available earlier than version 5.14.
+The parameter `impersonated_user_` provides a similar functionality, and is available in driver/server versions >= 4.4.
 The difference is that you don't need to know a user's password to impersonate them, but the user under which the `Driver` was created needs to have the link:{neo4j-docs-base-uri}/operations-manual/current/authentication-authorization/dbms-administration/#access-control-dbms-administration-impersonation[appropriate permissions].
 
 [source, python, test-skip]
