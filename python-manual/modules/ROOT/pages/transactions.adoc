@@ -416,7 +416,7 @@ Similar remarks hold for the `.executeRead()` and `.executeWrite()` methods.
 You can execute a query through a different user with the parameter `auth`.
 Switching user at the session level is cheaper than creating a new `Driver` object.
 Queries are then run within the security context of the given user (i.e., home database, permissions, etc.). +
-This feature requires a server version >= 5.8.
+Session-scoped authentication requires a server version >= 5.8.
 
 [source, python]
 ----

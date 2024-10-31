@@ -453,7 +453,7 @@ Similar remarks hold for the `.executeRead()` and `.executeWrite()` methods.
 You can execute a query through a different user by providing an link:https://neo4j.com/docs/api/java-driver/current/org.neo4j.driver/org/neo4j/driver/AuthTokens.html[AuthToken] as third parameter upon session creation.
 Switching user at the session level is cheaper than creating a new `Driver` object.
 Queries are then run within the security context of the given user (i.e., home database, permissions, etc.). +
-This feature requires a server version >= 5.8.
+Session-scoped authentication requires a server version >= 5.8.
 
 [source, java]
 ----
