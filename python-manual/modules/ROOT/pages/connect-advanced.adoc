@@ -64,11 +64,13 @@ If authentication is disabled on the server, the authentication parameter can be
 
 
 [#mtls]
-[role=label--new-5.27]
+[role=label--new-5.27 label--not-on-aura]
 == Mutual TLS (client-side certificates as 2FA)
 
 Mutual TLS (mTLS) allows you to use a client certificate as second factor for authenticating with the server.
 The certificate can only be used together with an authentication token and is not a replacement of regular authentication, unless authentication is disabled on the server.
+
+The client's certificate and public key must be placed in the server's `$HOME/certificates/trusted` directory.
 
 [NOTE]
 For mTLS to work, the driver's connection with the server must be encrypted, i.e. the xref:_connection_protocols_and_security[connection URI scheme] must be either `+s` or `+ssc` (ex. `neo4j+s://example.com:7687`).
@@ -78,7 +80,7 @@ For mTLS to work, the driver's connection with the server must be encrypted, i.e
 [.include-with-static-certificate]
 ======
 Use link:https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.auth_management.ClientCertificateProviders.static[`ClientCertificateProviders.static()`] for static certificates. +
-The method takes a link:https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.auth_management.ClientCertificate[`ClientCertificate`] instance.
+The method takes a link:https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.auth_management.ClientCertificate[`ClientCertificate`] instance, which takes the same parameters as Python's link:https://docs.python.org/3/library/ssl.html#ssl.SSLContext.load_cert_chain[`ssl.SSLContext.load_cert_chain()`].
 
 [source, python, test-skip]
 ----
@@ -95,12 +97,11 @@ AUTH = ("<Username>", "<Password>")
 
 cert_provider = ClientCertificateProviders.static(
     ClientCertificate(
-        # path to public certificate to load
+        # path to certificate
         "path/to/cert.pem",
-        # path to private key to load
+        # path to private key (optional; needed if certificate does not contain private key too)
         "path/to/key.pem",
-        # password to decrypt private key (can be a function or string)
-        # see also Python's ssl.SSLContext.load_cert_chain()
+        # password to decrypt private key (can be function or string) (optional)
         lambda: "password",
     )
 )
@@ -149,18 +150,18 @@ driver = neo4j.GraphDatabase.driver(
    client_certificate=cert_provider
 )
 
-# do work with the driver, until the certificate needs to be rotated
-# ...
+# use the driver...
 
+# ... until the certificate needs to be rotated
 cert_provider.update_certificate(
     ClientCertificate(
-        certfile="path/to/new/certfile.pem",
-        keyfile="path/to/new/keyfile.pem",
+        certfile="path/to/new/cert.pem",
+        keyfile="path/to/new/key.pem",
         password=lambda: "new_super_secret_password"
     )
 )
 
-# do more work with the driver, until the certificate needs to be
+# use the driver again, until the certificate needs to be
 # rotated again
 # ...
 ----
