@@ -79,12 +79,14 @@ If authentication is disabled on the server, the authentication parameter can be
 Mutual TLS (mTLS) allows you to use a client certificate as second factor for authenticating with the server.
 The certificate can only be used together with an authentication token and is not a replacement of regular authentication, unless authentication is disabled on the server.
 
-Use link:https://neo4j.com/docs/api/java-driver/current/org.neo4j.driver/org/neo4j/driver/ClientCertificateManagers.html[`ClientCertificateManagers.rotating()`] for both static and rotating certificates. +
-The method takes a link:https://neo4j.com/docs/api/java-driver/current/org.neo4j.driver/org/neo4j/driver/ClientCertificates.html[`ClientCertificate`] instance. +
-For rotating certificates, use the `.rotate()` method; static certificates don't need to be updated. +
+The client's certificate and public key must be placed in the server's `<NEO4J_HOME>/certificates/bolt/trusted` directory. For more information on server setup, see link:https://neo4j.com/docs/operations-manual/current/security/ssl-framework/#ssl-bolt-config[Configure SSL over Bolt].
 
 [NOTE]
 For mTLS to work, the driver's connection with the server must be encrypted, i.e. the xref:_connection_protocols_and_security[connection URI scheme] must be either `+s` or `+ssc` (ex. `neo4j+s://example.com:7687`).
+
+Use link:https://neo4j.com/docs/api/java-driver/current/org.neo4j.driver/org/neo4j/driver/ClientCertificateManagers.html[`ClientCertificateManagers.rotating()`] for both static and rotating certificates. +
+The method takes a link:https://neo4j.com/docs/api/java-driver/current/org.neo4j.driver/org/neo4j/driver/ClientCertificates.html[`ClientCertificate`] instance. +
+For rotating certificates, use the `.rotate()` method; static certificates don't need to be updated.
 
 [.tabbed-example]
 =====
