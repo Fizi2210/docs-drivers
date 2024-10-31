@@ -82,16 +82,15 @@ from neo4j.auth_management import (
 
 
 def auth_provider():
-    # some way to get a token
+    # Some way to get a token
     sso_token = get_sso_token()
-    # assume we know tokens expire every 60 seconds
+    # Assume we know tokens expire every 60 seconds
     expires_in = 60
-    return ExpiringAuth(
-        auth=neo4j.bearer_auth(sso_token),
-        # Include a little buffer so that new token is fetched before the old one expires
-        expires_in=expires_in - 10
-    )
+    # Include a little buffer so that new token is fetched before the old one expires
+    expires_in -= 10
 
+    auth = neo4j.bearer_auth(sso_token)
+    return ExpiringAuth(auth=auth).expires_in(expires_in)
 
 with neo4j.GraphDatabase.driver(
     URI,
@@ -101,7 +100,7 @@ with neo4j.GraphDatabase.driver(
 ----
 
 [NOTE]
-This API should not be used for switching users. Auth managers should always return tokens for the same identity.
+This API must not be used for switching users. Auth managers must always return tokens for the same identity.
 You can switch users at both xref:query-simple.adoc#impersonation[query level] and xref:transactions.adoc#impersonation[session level].
 
 [WARNING]

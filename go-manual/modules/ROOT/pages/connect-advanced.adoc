@@ -94,7 +94,7 @@ _, _ = neo4j.NewDriverWithContext(dbUri, auth.BearerTokenManager(fetchAuthTokenF
 ----
 
 [NOTE]
-This API should not be used for switching users. Auth managers should always return tokens for the same identity.
+This API must not be used for switching users. Auth managers must always return tokens for the same identity.
 You can switch users at both xref:query-simple.adoc#impersonation[query level] and xref:transactions.adoc#impersonation[session level].
 
 [WARNING]
